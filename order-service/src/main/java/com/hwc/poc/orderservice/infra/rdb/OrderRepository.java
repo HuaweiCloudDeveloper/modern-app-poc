@@ -2,12 +2,12 @@ package com.hwc.poc.orderservice.infra.rdb;
 
 import com.hwc.poc.orderservice.application.contract.OrderRepositoryContract;
 import com.hwc.poc.orderservice.application.model.Order;
+import com.hwc.poc.orderservice.application.model.OrderStates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.util.Objects;
@@ -19,7 +19,6 @@ public class OrderRepository implements OrderRepositoryContract {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    @Transactional
     public Order save(Order order) {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -36,30 +35,23 @@ public class OrderRepository implements OrderRepositoryContract {
         }, keyHolder);
 
         order.setOid(Objects.requireNonNull(keyHolder.getKey()).intValue());
-
-        //sql, order.getUid(), order.getName(), order.getCreateTime(), order.getTotalPrice(), order.getState().toString());
-
         return order;
     }
 
     @Override
     public Order load(Integer orderId) {
-//        Optional<Order> orderDataEntityOpt = orderJpaPersistence.findById(orderId);
-//
-//        if (orderDataEntityOpt.isPresent()) {
-//            List<OrderItem> orderItemDataEntities = orderItemJpaPersistence.findByOid(orderId);
-//            Order result = orderDataEntityOpt.get();
-//            result.setItems(orderItemDataEntities);
-//
-//            Payment payment = paymentJpaPersistence.findByOid(orderId);
-//            if (Objects.nonNull(payment)) {
-//                result.setPayment(payment);
-//            }
-//
-//            return result;
-//        }
+        String sql = "SELECT  oid, uid, name, create_time, total_price, state from orders where oid = ?";
 
-        return null;
+        return jdbcTemplate.queryForObject(sql, new Object[]{orderId}, (rs, rowNum) -> {
+            Order order = new Order();
+            order.setOid(rs.getInt("oid"));
+            order.setName(rs.getString("name"));
+            order.setCreateTime(rs.getLong("create_time"));
+            order.setTotalPrice(rs.getBigDecimal("total_price"));
+            order.setState(OrderStates.valueOf(rs.getString("state")));
+            order.setUid(rs.getInt("uid"));
+            return order;
+        });
     }
 
 

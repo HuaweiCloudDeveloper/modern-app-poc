@@ -10,7 +10,6 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -31,12 +30,6 @@ public class Order implements Serializable {
     private Integer pid;
 
     private String name;
-
-    private BigDecimal price;
-
-    private Integer amount;
-
-    //private List<OrderItem> items;
 
     public Order() {
         this.setCreateTime(new Date().getTime());
