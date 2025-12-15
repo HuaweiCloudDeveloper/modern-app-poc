@@ -3,7 +3,6 @@ package com.hwc.poc.orderservice.resource.parameters;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 
 @Getter
@@ -17,9 +16,6 @@ public class OrderCreationResponse {
     private Integer uid;
     private BigDecimal totalPrice;
     private Long createTime;
-    private String status;
-    private Integer pid;
+    private String state;
     private String name;
-    private BigDecimal price;
-    private Integer amount;
 }

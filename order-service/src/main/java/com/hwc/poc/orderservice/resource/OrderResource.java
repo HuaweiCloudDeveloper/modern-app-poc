@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderResource {
 
     protected static final ModelMapper mapper = new ModelMapper();
+    private static final Integer DEFUALT_UID = 1;
 
     @Autowired
     private OrderService orderService;
@@ -31,6 +32,7 @@ public class OrderResource {
     public OrderCreationResponse create(OrderCreationRequest request) {
 
         Order param = mapper.map(request, Order.class);
+        param.setUid(DEFUALT_UID);
 
         Order result = orderService.placeOrder(param);
 
