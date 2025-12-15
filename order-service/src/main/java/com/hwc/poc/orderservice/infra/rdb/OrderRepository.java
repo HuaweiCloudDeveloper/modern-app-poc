@@ -42,7 +42,7 @@ public class OrderRepository implements OrderRepositoryContract {
     public Order load(Integer orderId) {
         String sql = "SELECT  oid, uid, name, create_time, total_price, state from orders where oid = ?";
 
-        return jdbcTemplate.queryForObject(sql, new Object[]{orderId}, (rs, rowNum) -> {
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             Order order = new Order();
             order.setOid(rs.getInt("oid"));
             order.setName(rs.getString("name"));
@@ -51,7 +51,7 @@ public class OrderRepository implements OrderRepositoryContract {
             order.setState(OrderStates.valueOf(rs.getString("state")));
             order.setUid(rs.getInt("uid"));
             return order;
-        });
+        }, orderId);
     }
 
 
