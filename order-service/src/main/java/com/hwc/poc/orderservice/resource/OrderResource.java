@@ -1,0 +1,47 @@
+package com.hwc.poc.orderservice.resource;
+
+
+import com.hwc.poc.orderservice.application.OrderService;
+import com.hwc.poc.orderservice.application.model.Order;
+import com.hwc.poc.orderservice.resource.parameters.OrderCreationRequest;
+import com.hwc.poc.orderservice.resource.parameters.OrderCreationResponse;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+@RequestMapping("/orders")
+public class OrderResource {
+
+    protected static final ModelMapper mapper = new ModelMapper();
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    public OrderResource(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST, headers = "Accept=application/json")
+    public OrderCreationResponse create(OrderCreationRequest request) {
+
+        Order param = mapper.map(request, Order.class);
+
+        Order result = orderService.placeOrder(param);
+
+        return mapper.map(result, OrderCreationResponse.class);
+    }
+
+    @RequestMapping(value = "/{oid}", method = RequestMethod.GET, headers = "Accept=application/json")
+    public OrderCreationResponse getCurrentOrder(@PathVariable("oid") Integer orderId) {
+        final Order order = orderService.getOrderById(orderId);
+        return mapper.map(order, OrderCreationResponse.class);
+    }
+}
+
+
