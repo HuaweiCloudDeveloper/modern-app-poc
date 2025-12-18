@@ -1,4 +1,36 @@
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: orderservice-spc-sa
+  annotations:
+    cce.io/dew-resource: "[\"orderservice-db-secret\"]"
+---
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: orderservice-spc
+spec:
+  provider: cce
+  parameters:
+    objects: |
+      - objectName: "orderservice-db-secret"  
+        objectType: "csms"     
+        objectVersion: "latest"        
+        jmesPath:
+          - path: username      
+            objectAlias: username        
+          - path: password 
+            objectAlias: password
+  secretObjects:
+    - secretName: k8s-orderservice-db-secret
+      type: Opaque
+      data:
+        - objectName: username
+          key: username
+        - objectName: password
+          key: password
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: order-service
@@ -39,9 +71,31 @@ spec:
           requests:
             memory: "1Gi"
             cpu: "1000m"
+        volumeMounts:
+          - name: secrets-store-inline
+            mountPath: "/mnt/secrets"
+            readOnly: true
         env:
           - name: DB_HOST_AND_PORT
             value: 172.16.0.173:3306
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: k8s-orderservice-db-secret
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: k8s-orderservice-db-secret
+                key: password
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: orderservice-spc
+
       imagePullSecrets:
       - name: default-secret
 
