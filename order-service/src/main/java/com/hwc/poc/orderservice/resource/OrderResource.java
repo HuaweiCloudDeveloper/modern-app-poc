@@ -6,6 +6,8 @@ import com.hwc.poc.orderservice.application.model.Order;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationRequest;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationResponse;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/orders")
 public class OrderResource {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderResource.class);
     protected static final ModelMapper mapper = new ModelMapper();
     private static final Integer DEFUALT_UID = 1;
 
