@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: orderservice-spc-sa
+  namespace: default
   annotations:
     cce.io/dew-resource: "[\"orderservice-db-secret\"]"
 ---
