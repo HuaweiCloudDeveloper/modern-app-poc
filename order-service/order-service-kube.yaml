@@ -60,6 +60,7 @@ spec:
       labels:
         app: order-service
     spec:
+      serviceAccountName: orderservice-spc-sa
       containers:
       - name: order-service
         image: swr.cn-north-4.myhuaweicloud.com/itau-demo/order-service:0.0.1
