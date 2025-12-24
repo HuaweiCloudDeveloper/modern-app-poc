@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- 1. 定义常量：日志路径、格式、编码 -->
+    <property name="LOG_PATH" value="/opt/logs/inventory-service"/>          <!-- 日志存储路径（相对路径） -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/> <!-- 日志格式 -->
+    <property name="ENCODING" value="UTF-8"/>           <!-- 编码 -->
+
+    <!-- 2. 控制台输出 Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>${ENCODING}</charset>
+        </encoder>
+        <!-- 只输出 INFO 及以上级别（可选） -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- 3. 文件输出 Appender（滚动文件，按大小/时间分割） -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件路径 -->
+        <file>${LOG_PATH}/springboot-logback-inventoryservice.log</file>
+        <!-- 滚动策略：按大小分割，保留历史文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 分割后的日志文件名（按天分割） -->
+            <fileNamePattern>${LOG_PATH}/springboot-logback-inventoryservice.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 按大小分割（单个文件最大 100MB） -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 日志保留天数 -->
+            <maxHistory>30</maxHistory>
+            <!-- 总日志大小上限（超过则删除旧文件） -->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        <!-- 日志格式 -->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>${ENCODING}</charset>
+        </encoder>
+        <!-- 输出级别：DEBUG 及以上 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <springProfile name="default">
+        <root level="WARN">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+</configuration>
