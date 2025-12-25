@@ -79,7 +79,11 @@ spec:
             readOnly: true
         env:
           - name: DB_HOST_AND_PORT
-            value: 172.16.0.173:3306
+            value: "172.16.0.173:3306"
+          - name: MAXIMUM_POOL_SIZE
+            value: 600
+          - name: MINIMUM_IDLE
+            value: 50
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
