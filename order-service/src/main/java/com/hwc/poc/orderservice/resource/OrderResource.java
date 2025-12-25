@@ -47,6 +47,15 @@ public class OrderResource {
         final Order order = orderService.getOrderById(orderId);
         return mapper.map(order, OrderCreationResponse.class);
     }
+
+//    @RequestMapping(value = "", method = RequestMethod.POST, headers = "Accept=application/json")
+//    public String createInventory(OrderEntityRequest request) {
+//
+//        Order order = mapper.map(request, Order.class);
+//        Integer oid = orderService.createInventory(order);
+//        return new ResultTemplate<Integer>(true, oid);
+//    }
+
 }
 
 

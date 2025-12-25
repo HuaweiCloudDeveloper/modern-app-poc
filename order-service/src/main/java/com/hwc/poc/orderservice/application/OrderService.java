@@ -29,8 +29,7 @@ public class OrderService {
 
 
     private void lockInventory(Order order) {
-//        Map<Integer, Integer> productInventoryMap = Maps.newHashMap();
-//        inventoryGateway.lock(order.getOid(), productInventoryMap);
+
     }
 
 

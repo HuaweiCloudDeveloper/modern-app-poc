@@ -2,7 +2,8 @@ package com.hwc.poc.orderservice.infra.gateway;
 
 import com.hwc.poc.orderservice.application.contract.InventoryGatewayContract;
 import com.hwc.poc.orderservice.infra.gateway.inventory.InventoryClient;
-import com.hwc.poc.orderservice.infra.gateway.inventory.InventoryLock;
+import com.hwc.poc.orderservice.infra.gateway.inventory.InventoryRequest;
+import com.hwc.poc.orderservice.infra.gateway.inventory.InventoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +18,12 @@ public class InventoryGateway implements InventoryGatewayContract {
 	@Override
 	public String lock(Integer oid, Map<Integer, Integer> productInventoryMap) {
 		oid = 123; // for demo only
-		return InventoryClient.lock(new InventoryLock(oid, productInventoryMap));
+		return InventoryClient.add(new InventoryRequest());
 	}
 
 	@Override
 	public String unlock(String lockId) {
 		lockId = "10"; //for demo only
-		return InventoryClient.unlock(lockId);
+		return InventoryClient.find(lockId);
 	}
 }

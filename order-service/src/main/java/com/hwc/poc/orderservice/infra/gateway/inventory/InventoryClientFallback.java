@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 public class InventoryClientFallback implements InventoryClient {
 
 	@Override
-	public String lock(InventoryLock lock) {
+	public String add(InventoryRequest lock) {
 		log.warn("InventoryClientFallback");
-		return "";
+		return null;
 	}
 
 	@Override
-	public String unlock(String lockId) {
+	public String find(String oid) {
 		log.warn("InventoryClientFallback");
 		return "";
 	}
