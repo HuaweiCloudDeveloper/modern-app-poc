@@ -65,7 +65,28 @@ spec:
       - name: order-service
         image: swr.cn-north-4.myhuaweicloud.com/itau-demo/order-service:0.0.1
         ports:
-        - containerPort: 9080
+          - containerPort: 9080
+          - containerPort: 9081
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 9081
+            scheme: HTTP
+          initialDelaySeconds: 30    # 容器启动后，首次探测延迟（根据应用启动时间调整）
+          periodSeconds: 10         # 探测间隔（每 10 秒检测一次）
+          timeoutSeconds: 5         # 探测超时时间（5 秒未响应则失败）
+          failureThreshold: 3       # 连续失败 3 次，判定容器异常，触发重启
+          successThreshold: 1       # 连续成功 1 次，判定容器恢复
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 9081
+            scheme: HTTP
+          initialDelaySeconds: 15    # 就绪探针首次探测更早（避免流量等待过久）
+          periodSeconds: 5          # 就绪探针检测更频繁（快速恢复流量）
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
         resources:
           limits:
             memory: "2Gi"
