@@ -5,6 +5,7 @@ import com.hwc.poc.orderservice.application.OrderService;
 import com.hwc.poc.orderservice.application.model.Order;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationRequest;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationResponse;
+import io.micrometer.common.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,6 @@ public class OrderResource {
     protected static final ModelMapper mapper = new ModelMapper();
     private static final Integer DEFUALT_UID = 1;
 
-    @Autowired
     private OrderService orderService;
 
     @Autowired
@@ -48,13 +48,45 @@ public class OrderResource {
         return mapper.map(order, OrderCreationResponse.class);
     }
 
-//    @RequestMapping(value = "", method = RequestMethod.POST, headers = "Accept=application/json")
-//    public String createInventory(OrderEntityRequest request) {
+    @RequestMapping(value = "/inventory", method = RequestMethod.POST, headers = "Accept=application/json")
+    public String createInventory(OrderCreationResponse request) {
+
+        Order order = mapper.map(request, Order.class);
+        orderService.lockInventory(order);
+        return null;
+    }
+
+
+    @RequestMapping(value = "/inventory/{oid}", method = RequestMethod.GET, headers = "Accept=application/json")
+    public String queryInventory(@PathVariable("oid") Integer oid) {
+
+//        String orderDetails = inventoryService.queryInventory(oid);
 //
+//        if(StringUtils.isEmpty(orderDetails)){
+//            return new ResultTemplate<String>(false);
+//        }
+//        return new ResultTemplate<String>(true, orderDetails);
+        return null;
+
+    }
+
+    @RequestMapping(value = "/inventory/{oid}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+    public String deleteInventory(@PathVariable("oid") Integer oid) {
+
+//        inventoryService.deleteInventory(oid);
+//        return new ResultTemplate<Boolean>(true);
+        return null;
+
+    }
+
+    @RequestMapping(value = "/inventory/notify", method = RequestMethod.POST, headers = "Accept=application/json")
+    public String notifyInventory(OrderCreationResponse request) {
+
 //        Order order = mapper.map(request, Order.class);
-//        Integer oid = orderService.createInventory(order);
-//        return new ResultTemplate<Integer>(true, oid);
-//    }
+//        inventoryService.notifyInventory(order);
+//        return new ResultTemplate<Boolean>(true);
+        return null;
+    }
 
 }
 

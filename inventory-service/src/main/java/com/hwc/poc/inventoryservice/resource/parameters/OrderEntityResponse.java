@@ -16,7 +16,7 @@ public class OrderEntityResponse {
     private Integer uid;
     private BigDecimal totalPrice;
     private Long createTime;
-    private String status;
+    private String state;
     private Integer pid;
     private String name;
     private BigDecimal price;

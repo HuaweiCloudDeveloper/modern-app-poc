@@ -1,9 +1,9 @@
 package com.hwc.poc.orderservice.application.contract;
 
-import java.util.Map;
+import com.hwc.poc.orderservice.application.model.Order;
 
 public interface InventoryGatewayContract {
-    String lock(Integer oid, Map<Integer, Integer> productInventoryMap);
+    String lock(Order order);
 
     String unlock(String lockId);
 }

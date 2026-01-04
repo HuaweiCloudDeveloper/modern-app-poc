@@ -1,6 +1,7 @@
 package com.hwc.poc.orderservice.application;
 
 
+import com.hwc.poc.orderservice.application.contract.InventoryGatewayContract;
 import com.hwc.poc.orderservice.application.contract.OrderRepositoryContract;
 import com.hwc.poc.orderservice.application.model.Order;
 import org.modelmapper.ModelMapper;
@@ -14,8 +15,8 @@ public class OrderService {
     @Autowired
     private OrderRepositoryContract repository;
 
-//    @Autowired
-//    private InventoryGatewayContract inventoryGateway;
+    @Autowired
+    private InventoryGatewayContract inventoryGateway;
 
     public Order placeOrder(Order order) {
         repository.save(order);
@@ -28,8 +29,9 @@ public class OrderService {
     }
 
 
-    private void lockInventory(Order order) {
-
+    public void lockInventory(Order order) {
+        String result = inventoryGateway.lock(order);
+        return;
     }
 
 

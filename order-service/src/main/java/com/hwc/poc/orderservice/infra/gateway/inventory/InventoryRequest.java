@@ -17,7 +17,7 @@ public class InventoryRequest {
     public Integer uid;
     public BigDecimal totalPrice;
     public Long createTime;
-    public String status;
+    public String state;
     public Integer pid;
     public String name;
     public BigDecimal price;

@@ -8,10 +8,7 @@ import com.hwc.poc.inventoryservice.resource.parameters.OrderEntityRequest;
 import io.micrometer.common.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -29,7 +26,7 @@ public class InventoryResource {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResultTemplate<Integer> createInventory(OrderEntityRequest request) {
+    public ResultTemplate<Integer> createInventory(@RequestBody OrderEntityRequest request) {
 
         Order order = mapper.map(request, Order.class);
         Integer oid = inventoryService.createInventory(order);
