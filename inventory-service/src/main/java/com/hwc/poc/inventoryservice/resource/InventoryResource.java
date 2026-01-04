@@ -52,7 +52,7 @@ public class InventoryResource {
     }
 
     @RequestMapping(value = "/notify", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResultTemplate<Boolean> notifyInventory(OrderEntityRequest request) {
+    public ResultTemplate<Boolean> notifyInventory(@RequestBody OrderEntityRequest request) {
 
         Order order = mapper.map(request, Order.class);
         inventoryService.notifyInventory(order);

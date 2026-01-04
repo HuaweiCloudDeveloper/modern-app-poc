@@ -42,6 +42,7 @@ public class InventoryDmsRepository implements InventoryDmsContract {
              dmsProducer.send(record);
          } catch (RuntimeException e) {
              logger.error("Producer send message to DMS failed.");
+             throw e;
          }
      }
 }

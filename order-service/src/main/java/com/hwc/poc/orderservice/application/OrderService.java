@@ -4,7 +4,6 @@ package com.hwc.poc.orderservice.application;
 import com.hwc.poc.orderservice.application.contract.InventoryGatewayContract;
 import com.hwc.poc.orderservice.application.contract.OrderRepositoryContract;
 import com.hwc.poc.orderservice.application.model.Order;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +28,16 @@ public class OrderService {
     }
 
 
-    public void lockInventory(Order order) {
-        String result = inventoryGateway.lock(order);
-        return;
+    public String lockInventory(Order order) {
+        return inventoryGateway.lock(order);
     }
 
 
+    public String queryInventory(Integer oid) {
+        return inventoryGateway.queryInventory(oid);
+    }
+
+    public String notifyInventory(Order order) {
+        return inventoryGateway.notifyInventory(order);
+    }
 }

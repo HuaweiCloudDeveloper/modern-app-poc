@@ -15,4 +15,6 @@ public interface InventoryClient {
 	@RequestMapping(method = RequestMethod.GET, value = "/inventory/{oid}")
 	String find(@PathVariable("oid") String oid);
 
+	@RequestMapping(method = RequestMethod.POST, value = "/inventory/notify")
+	String notifyInventory(@RequestBody InventoryRequest inventoryRequest);
 }

@@ -6,4 +6,8 @@ public interface InventoryGatewayContract {
     String lock(Order order);
 
     String unlock(String lockId);
+
+    String queryInventory(Integer oid);
+
+    String notifyInventory(Order order);
 }
