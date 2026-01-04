@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.ListTablesRequest;
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import com.amazonaws.services.dynamodbv2.model.*;
+import com.hwc.poc.inventoryservice.application.utils.InventoryConstants;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -27,26 +28,26 @@ public class DemoTest {
 
     public static void main(String[] args){
 
-//        String tableName = "hwc_inventory_db";
-//
-//        AmazonDynamoDB dynamoDBClient = AmazonDynamoDBClientBuilder.standard()
-//                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://172.16.0.248:80", "region_a"))
-//                .withCredentials(credentialsProvider)
-//                .build();
-//
-//        //ListTables
-//        ListTablesRequest listTablesRequest = new ListTablesRequest().withLimit(10);
-//        ListTablesResult res = dynamoDBClient.listTables(listTablesRequest);
-//        System.out.println("[1]-amazonDynamoDB.listTables:   " + res.getTableNames().toString());
-//
-//        //deleteTable
-//        try {
-//            dynamoDBClient.deleteTable(tableName);
-//            res = dynamoDBClient.listTables(listTablesRequest);
-//            System.out.println("[2]-amazonDynamoDB.deleteTable:   " + res.getTableNames().toString());
-//        } catch (ResourceNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        AmazonDynamoDB dynamoDBClient = AmazonDynamoDBClientBuilder.standard()
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://172.16.0.248:80", "region_default"))
+                .withCredentials(credentialsProvider)
+                .build();
+
+        //ListTables
+        ListTablesRequest listTablesRequest = new ListTablesRequest()
+                .withLimit(10)
+                .withExclusiveStartTableName(InventoryConstants.KEY_INV_TABLE_NAME);
+        ListTablesResult res = dynamoDBClient.listTables(listTablesRequest);
+        System.out.println("[1]-amazonDynamoDB.listTables:   " + res.getTableNames().toString());
+
+        //deleteTable
+        try {
+            dynamoDBClient.deleteTable(InventoryConstants.KEY_INV_TABLE_NAME);
+            res = dynamoDBClient.listTables(listTablesRequest);
+            System.out.println("[2]-amazonDynamoDB.deleteTable:   " + res.getTableNames().toString());
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
 //
 //        //createTable
 //        List<AttributeDefinition> attributeDefinitionList = new ArrayList<>();
@@ -60,7 +61,7 @@ public class DemoTest {
 //                .withWriteCapacityUnits(5000L);
 //
 //        CreateTableRequest createTableRequest = new CreateTableRequest()
-//                .withTableName(tableName)
+//                .withTableName(InventoryConstants.KEY_INV_TABLE_NAME)
 //                .withAttributeDefinitions(attributeDefinitionList)
 //                .withKeySchema(keySchema)
 //                .withProvisionedThroughput(provisionedThroughput);
@@ -77,10 +78,11 @@ public class DemoTest {
 //        HashMap<String, AttributeValue> putItemValues = new HashMap<String, AttributeValue>();
 //        putItemValues.put("oid", new AttributeValue("1"));
 //        putItemValues.put("order_details", new AttributeValue(String.valueOf("{}")));
-//        dynamoDBClient.putItem(tableName, putItemValues);
+//        dynamoDBClient.putItem(InventoryConstants.KEY_INV_TABLE_NAME, putItemValues);
 //        HashMap<String, AttributeValue> getItemValues = new HashMap<String, AttributeValue>();
 //        getItemValues.put("oid", new AttributeValue("1"));
-//        GetItemRequest getItemRequest = new GetItemRequest().withTableName(tableName).withKey(getItemValues);
+//        GetItemRequest getItemRequest = new GetItemRequest().withTableName(InventoryConstants.KEY_INV_TABLE_NAME)
+//                .withKey(getItemValues);
 //        Map<String, AttributeValue> returnItem = dynamoDBClient.getItem(getItemRequest).getItem();
 //        System.out.println("[3.1]-amazonDynamoDB.putItem:   " +
 //                "[oid: " + returnItem.get("oid") + "]" +
@@ -89,8 +91,9 @@ public class DemoTest {
 //        //deleteItem
 //        HashMap<String, AttributeValue> deleteItemValues = new HashMap<String, AttributeValue>();
 //        deleteItemValues.put("oid", new AttributeValue("1"));
-//        dynamoDBClient.deleteItem(tableName, deleteItemValues);
-//        getItemRequest = new GetItemRequest().withTableName(tableName).withKey(deleteItemValues);
+//        dynamoDBClient.deleteItem(InventoryConstants.KEY_INV_TABLE_NAME, deleteItemValues);
+//        getItemRequest = new GetItemRequest().withTableName(InventoryConstants.KEY_INV_TABLE_NAME)
+//                .withKey(deleteItemValues);
 //        returnItem = dynamoDBClient.getItem(getItemRequest).getItem();
 //        if(returnItem != null){
 //            System.out.println("[3.2]-amazonDynamoDB.putItem:   [oid:" + returnItem.get("oid") + "]");
@@ -118,22 +121,22 @@ public class DemoTest {
 //        }
 
 
-        Properties consumerProperties = new Properties();
-        consumerProperties.put("bootstrap.servers", "172.16.0.46:9092,172.16.0.191:9092,172.16.0.138:9092");
-        consumerProperties.put("group.id", "test-group");
-        consumerProperties.put("enable.auto.commit", "true");
-        consumerProperties.put("auto.commit.interval.ms", "1000");
-        consumerProperties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        consumerProperties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-
-        KafkaConsumer<String, String> dmsConsumer = new KafkaConsumer<>(consumerProperties);
-        dmsConsumer.subscribe(Arrays.asList("topic-inventory"));
-        while(true){
-
-            ConsumerRecords<String, String> records = dmsConsumer.poll(Duration.ofMillis(1000));
-            for(ConsumerRecord<String, String> record : records){
-                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(),record.key(),record.value());
-            }
-        }
+//        Properties consumerProperties = new Properties();
+//        consumerProperties.put("bootstrap.servers", "172.16.0.46:9092,172.16.0.191:9092,172.16.0.138:9092");
+//        consumerProperties.put("group.id", "test-group");
+//        consumerProperties.put("enable.auto.commit", "true");
+//        consumerProperties.put("auto.commit.interval.ms", "1000");
+//        consumerProperties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+//        consumerProperties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+//
+//        KafkaConsumer<String, String> dmsConsumer = new KafkaConsumer<>(consumerProperties);
+//        dmsConsumer.subscribe(Arrays.asList("topic-inventory"));
+//        while(true){
+//
+//            ConsumerRecords<String, String> records = dmsConsumer.poll(Duration.ofMillis(1000));
+//            for(ConsumerRecord<String, String> record : records){
+//                System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(),record.key(),record.value());
+//            }
+//        }
     }
 }

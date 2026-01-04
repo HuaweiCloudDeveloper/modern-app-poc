@@ -52,6 +52,8 @@ spec:
             value: topic-inventory
           - name: DMS_PARTITION
             value: "0"
+        imagePullPolicy: Always
+      restartPolicy: Always
       imagePullSecrets:
       - name: default-secret
 

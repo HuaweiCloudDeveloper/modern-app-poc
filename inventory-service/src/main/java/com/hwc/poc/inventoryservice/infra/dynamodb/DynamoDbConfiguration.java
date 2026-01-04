@@ -33,13 +33,13 @@ public class DynamoDbConfiguration {
     @Value("${hwc.poc.inventory.dynamodb.region}")
     private String dynamoDbRegion;
 
-    @Value("${hwc.poc.inventory.dynamodb.url:${DB_HOST_AND_PORT}}")
+    @Value("${DB_HOST_AND_PORT:${hwc.poc.inventory.dynamodb.url}}")
     private String dynamoDbConRul;
 
-    @Value("${hwc.poc.inventory.dynamodb.ak:${DB_USERNAME}}")
+    @Value("${DB_USERNAME:${hwc.poc.inventory.dynamodb.ak}}")
     private String dynamoDbAk;
 
-    @Value("${hwc.poc.inventory.dynamodb.sk:${DB_PASSWORD}}")
+    @Value("${DB_PASSWORD:${hwc.poc.inventory.dynamodb.sk}}")
     private String dynamoDbSk;
 
     @Bean

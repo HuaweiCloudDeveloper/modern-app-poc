@@ -20,10 +20,10 @@ public class InventoryDmsRepository implements InventoryDmsContract {
 
     private static final Logger logger = LoggerFactory.getLogger(InventoryDmsRepository.class);
 
-    @Value("${hwc.poc.inventory.dms.topic:${DMS_TOPIC}}")
+    @Value("${DMS_TOPIC:${hwc.poc.inventory.dms.topic}}")
     private String dmsTopic;
 
-    @Value("${hwc.poc.inventory.dms.partition:${DMS_PARTITION}}")
+    @Value("${DMS_PARTITION:${hwc.poc.inventory.dms.partition}}")
     private String dmsPartition;
 
     @Autowired

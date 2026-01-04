@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
     <!-- 1. 定义常量：日志路径、格式、编码 -->
-    <property name="LOG_PATH" value="/opt/logs/inventory-service"/>          <!-- 日志存储路径（相对路径） -->
+    <property name="LOG_ROOT" value="${LOG_LEVEL:-WARN}"/>    <!-- 日志存储路径（相对路径） -->
+    <property name="LOG_PATH" value="${LOG_DIR:-/opt/logs/inventory-service}"/>    <!-- 日志存储路径（相对路径） -->
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/> <!-- 日志格式 -->
     <property name="ENCODING" value="UTF-8"/>           <!-- 编码 -->
-
     <!-- 2. 控制台输出 Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -46,7 +46,7 @@
     </appender>
 
     <springProfile name="default">
-        <root level="WARN">
+        <root level="${LOG_ROOT}">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </root>

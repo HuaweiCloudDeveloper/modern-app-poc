@@ -97,19 +97,29 @@ public class InventoryDynamoDbRepository implements InventoryDynamoDbContract {
                 .withLimit(InventoryConstants.KEY_INV_TABLE_LIMIT)
                 .withExclusiveStartTableName(InventoryConstants.KEY_INV_TABLE_NAME);
 
-        ListTablesResult listTablesResult = dynamoDBClient.listTables(listTablesRequest)
-                .withTableNames(InventoryConstants.KEY_INV_TABLE_NAME);
+        ListTablesResult listTablesResult = null;
+        try {
+
+            listTablesResult = dynamoDBClient.listTables(listTablesRequest);
+        } catch (ResourceNotFoundException e) {
+
+            logger.error("The table {} doesn't exists.",InventoryConstants.KEY_INV_TABLE_NAME, e);
+            return listTabResult;
+        }
 
         if(listTablesResult != null && !listTablesResult.getTableNames().isEmpty()){
 
-            logger.info("The table {} exists.",listTablesResult.getTableNames().toString());
             listTabResult = true;
+            logger.info("The table {} exists.",listTablesResult.getTableNames().toString());
+        } else {
+
+            logger.error("The table {} doesn't exists.",InventoryConstants.KEY_INV_TABLE_NAME);
         }
 
         return listTabResult;
     }
 
-    public boolean createInventoryTable(){
+    public synchronized boolean createInventoryTable(){
 
         boolean createTabResult = true;
 
@@ -136,8 +146,11 @@ public class InventoryDynamoDbRepository implements InventoryDynamoDbContract {
 
         // Create table
         try {
+
             dynamoDBClient.createTable(createTableRequest);
+            logger.info("Create inventory table {} successfully. ", InventoryConstants.KEY_INV_TABLE_NAME);
         } catch (ResourceInUseException e) {
+
             logger.error("Create inventory table {} failed. ", InventoryConstants.KEY_INV_TABLE_NAME, e);
             createTabResult = false;
         }

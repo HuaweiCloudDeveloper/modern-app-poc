@@ -16,7 +16,7 @@ public class DmsProducerConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(DmsProducerConfiguration.class);
 
-    @Value("${hwc.poc.inventory.dms.bootstrap-servers:${DMS_HOST_AND_PORT}}")
+    @Value("${DMS_HOST_AND_PORT:${hwc.poc.inventory.dms.bootstrap-servers}}")
     private String dmsConServers;
 
     @Bean
