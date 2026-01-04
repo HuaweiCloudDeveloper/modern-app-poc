@@ -102,7 +102,7 @@ spec:
           - name: DB_HOST_AND_PORT
             value: "172.16.0.173:3306"
           - name: SVC_INVENTORY_URL
-            value: "https://app-poc.itau.hwc.com"
+            value: "https://modern-app-poc.itau.hwc.com"
           - name: MAXIMUM_POOL_SIZE
             value: "600"
           - name: MINIMUM_IDLE
