@@ -1,12 +1,13 @@
 package com.hwc.poc.orderservice.infra.gateway.inventory;
 
+import com.hwc.poc.orderservice.infra.config.FeignHttpsConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(url = "${hwc.poc.inventory.url}", name = "inventory")
+@FeignClient(url = "${hwc.poc.inventory.url}", name = "inventory", configuration = FeignHttpsConfig.class)
 public interface InventoryClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/inventory")
