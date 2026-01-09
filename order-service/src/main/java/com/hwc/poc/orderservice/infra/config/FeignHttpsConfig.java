@@ -5,6 +5,7 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,12 @@ import java.security.cert.X509Certificate;
 
 @Configuration
 public class FeignHttpsConfig {
+
+    @Value("${spring.cloud.openfeign.httpclient.max-connections}")
+    private int maxConnections;
+
+    @Value("${spring.cloud.openfeign.httpclient.max-connections-per-route}")
+    private int maxPerRoute;
 
     /**
      * 配置Feign的HTTPS客户端（信任所有证书）
@@ -43,6 +50,8 @@ public class FeignHttpsConfig {
             // 4. 构建Apache HttpClient
             org.apache.http.impl.client.CloseableHttpClient httpClient = org.apache.http.impl.client.HttpClients.custom()
                     .setSSLSocketFactory(sslSocketFactory)
+                    .setMaxConnTotal(maxConnections)
+                    .setMaxConnPerRoute(maxPerRoute)
                     .build();
 
             // 5. 包装为Feign的Client
