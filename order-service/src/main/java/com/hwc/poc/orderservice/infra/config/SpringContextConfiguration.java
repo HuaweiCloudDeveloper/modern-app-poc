@@ -3,6 +3,7 @@ package com.hwc.poc.orderservice.infra.config;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +18,12 @@ public class SpringContextConfiguration {
     @Autowired
     private HikariDataSource dataSource;
 
+    @Value("${spring.cloud.openfeign.httpclient.max-connections}")
+    private int maxConnections;
+
+    @Value("${spring.cloud.openfeign.httpclient.max-connections-per-route}")
+    private int maxPerRoute;
+
     @PostConstruct
     public  void logHikariConfig() {
         System.out.println("================== HikariCP Config ==================");
@@ -27,5 +34,10 @@ public class SpringContextConfiguration {
         System.out.println("Idle Timeout:" + dataSource.getIdleTimeout());
         System.out.println("Max LifeTime:" + dataSource.getMaxLifetime());
         System.out.println("======================================================");
+        System.out.println("================= FeignClient Config =================");
+        System.out.println("Max Connections:" + maxConnections);
+        System.out.println("Max Connections Per Route:" + maxPerRoute);
+        System.out.println("======================================================");
+
     }
 }

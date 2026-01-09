@@ -105,6 +105,10 @@ spec:
             value: "https://modern-app-poc.itau.hwc.com"
           - name: MAXIMUM_POOL_SIZE
             value: "600"
+          - name: FEIGN_HTTPCLIENT_MAX_CONNECTIONS
+            value: "2000"
+          - name: FEIGN_HTTPCLIENT_MAX_CONNECTIONS_PER_ROUTE
+            value: "1000"
           - name: MINIMUM_IDLE
             value: "50"
           - name: DB_USERNAME
