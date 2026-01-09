@@ -40,18 +40,30 @@ spec:
             memory: "1Gi"
             cpu: "1000m"
         env:
+          - name: AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT
+            value: "true"
           - name: DB_HOST_AND_PORT
-            value: http://172.16.0.248:80
+            value: "http://172.16.0.248:80"
           - name: DB_USERNAME
-            value: rwuser
+            value: "rwuser"
           - name: DB_PASSWORD
-            value: Huawei@#123
+            value: "Huawei@#123"
           - name: DMS_HOST_AND_PORT
-            value: 172.16.0.46:9092,172.16.0.191:9092,172.16.0.138:9092
+            value: "172.16.0.46:9092,172.16.0.191:9092,172.16.0.138:9092"
           - name: DMS_TOPIC
-            value: topic-inventory
+            value: "topic-inventory"
           - name: DMS_PARTITION
             value: "0"
+          - name: DMS_CONSUMER
+            value: "false"
+          - name: DMS_CONSUMER_GROUP_ID
+            value: "test-group"
+          - name: DMS_CONSUMER_ENABLE_AUTO_COMMIT
+            value: "false"
+          - name: DMS_CONSUMER_AUTO_COMMIT_INTERVAL_MS
+            value: "1000"
+          - name: DMS_CONSUMER_PULL_DURATION
+            value: "1000"
         imagePullPolicy: Always
       restartPolicy: Always
       imagePullSecrets:

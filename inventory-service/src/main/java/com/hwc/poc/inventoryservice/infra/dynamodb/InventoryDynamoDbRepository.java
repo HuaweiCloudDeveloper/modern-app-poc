@@ -92,28 +92,28 @@ public class InventoryDynamoDbRepository implements InventoryDynamoDbContract {
 
         boolean listTabResult = false;
 
-        // Define list table Req
-        ListTablesRequest listTablesRequest = new ListTablesRequest()
-                .withLimit(InventoryConstants.KEY_INV_TABLE_LIMIT)
-                .withExclusiveStartTableName(InventoryConstants.KEY_INV_TABLE_NAME);
-
+        // Define list table result
         ListTablesResult listTablesResult = null;
         try {
 
-            listTablesResult = dynamoDBClient.listTables(listTablesRequest);
+            listTablesResult = dynamoDBClient.listTables();
         } catch (ResourceNotFoundException e) {
 
-            logger.error("The table {} doesn't exists.",InventoryConstants.KEY_INV_TABLE_NAME, e);
+            logger.error("The inventory table {} doesn't exists. The listTables() throws ResourceNotFoundException."
+                    , InventoryConstants.KEY_INV_TABLE_NAME, e);
             return listTabResult;
         }
 
-        if(listTablesResult != null && !listTablesResult.getTableNames().isEmpty()){
+        List<String> tablesList = listTablesResult.getTableNames();
+        if(tablesList == null || tablesList.isEmpty()){
+            logger.error("The inventory table {} doesn't exists. The listTablesResult is empty."
+                    , InventoryConstants.KEY_INV_TABLE_NAME);
+            return listTabResult;
+        }
 
+        if(tablesList.contains(InventoryConstants.KEY_INV_TABLE_NAME)){
             listTabResult = true;
-            logger.info("The table {} exists.",listTablesResult.getTableNames().toString());
-        } else {
-
-            logger.error("The table {} doesn't exists.",InventoryConstants.KEY_INV_TABLE_NAME);
+            logger.info("The inventory table {} exists.", listTablesResult.getTableNames().toString());
         }
 
         return listTabResult;

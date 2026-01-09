@@ -32,7 +32,7 @@ public class InventoryDmsRepository implements InventoryDmsContract {
     @Autowired
     private ObjectMapper objectMapper;
 
-     public void notifyInventory(Order order){
+     public boolean notifyInventory(Order order) {
 
          String oid = String.valueOf(order.getOid());
          String orderDetails = objectMapper.writeValueAsString(order);
@@ -42,7 +42,8 @@ public class InventoryDmsRepository implements InventoryDmsContract {
              dmsProducer.send(record);
          } catch (RuntimeException e) {
              logger.error("Producer send message to DMS failed.");
-             throw e;
+             return false;
          }
+         return true;
      }
 }

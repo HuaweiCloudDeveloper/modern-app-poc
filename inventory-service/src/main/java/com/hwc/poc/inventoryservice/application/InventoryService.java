@@ -42,9 +42,9 @@ public class InventoryService {
         dynamoDbRepository.deleteInventory(oid);
     }
 
-    public void notifyInventory(Order order){
+    public boolean notifyInventory(Order order){
 
-        dmsRepository.notifyInventory(order);
+        return dmsRepository.notifyInventory(order);
     }
 
     private void checkInventoryTable(){

@@ -35,10 +35,16 @@ public class DemoTest {
 
         //ListTables
         ListTablesRequest listTablesRequest = new ListTablesRequest()
-                .withLimit(10)
-                .withExclusiveStartTableName(InventoryConstants.KEY_INV_TABLE_NAME);
+                .withLimit(10);
         ListTablesResult res = dynamoDBClient.listTables(listTablesRequest);
         System.out.println("[1]-amazonDynamoDB.listTables:   " + res.getTableNames().toString());
+
+        ListTablesResult resExt1 = dynamoDBClient.listTables();
+        System.out.println("[1.1]-amazonDynamoDB.listTables Ext:   " + resExt1.getTableNames().toString());
+
+        boolean inventoryTableIsExist = resExt1.getTableNames().contains(InventoryConstants.KEY_INV_TABLE_NAME);
+        System.out.println("[1.2]-amazonDynamoDB.listTables Ext:  inventoryTableIsExist = " + inventoryTableIsExist);
+
 
         //deleteTable
         try {

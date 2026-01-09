@@ -20,7 +20,7 @@ public class DmsProducerConfiguration {
     private String dmsConServers;
 
     @Bean
-    Producer<String, String>  dmsProducer(){
+    Producer<String, String>  dmsProducer() {
 
         Properties properties = new Properties();
 
@@ -31,9 +31,9 @@ public class DmsProducerConfiguration {
         properties.put("buffer.memory", InventoryConstants.KEY_INV_DMS_ORDER_DEFAULT_BUFFER);
         properties.put("retries", InventoryConstants.KEY_INV_DMS_ORDER_DEFAULT_RETRIES);
 
-        Producer<String, String> producer = new KafkaProducer<>(properties);
+        Producer<String, String> dmsProducer = new KafkaProducer<>(properties);
         logger.info("Create dmsProducer successfully");
 
-        return producer;
+        return dmsProducer;
     }
 }

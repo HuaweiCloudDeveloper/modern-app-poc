@@ -5,5 +5,5 @@ import com.hwc.poc.inventoryservice.application.model.Order;
 
 public interface InventoryDmsContract {
 
-    void notifyInventory(Order order);
+    boolean notifyInventory(Order order);
 }

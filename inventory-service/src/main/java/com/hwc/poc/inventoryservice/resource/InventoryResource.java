@@ -3,6 +3,7 @@ package com.hwc.poc.inventoryservice.resource;
 
 import com.hwc.poc.inventoryservice.application.InventoryService;
 import com.hwc.poc.inventoryservice.application.model.Order;
+import com.hwc.poc.inventoryservice.application.utils.InventoryConstants;
 import com.hwc.poc.inventoryservice.application.utils.ResultTemplate;
 import com.hwc.poc.inventoryservice.resource.parameters.OrderEntityRequest;
 import io.micrometer.common.util.StringUtils;
@@ -30,6 +31,10 @@ public class InventoryResource {
 
         Order order = mapper.map(request, Order.class);
         Integer oid = inventoryService.createInventory(order);
+
+        if(oid == InventoryConstants.KEY_INVALID_ORDER_ID){
+            return new ResultTemplate<Integer>(false, oid);
+        }
         return new ResultTemplate<Integer>(true, oid);
     }
 
@@ -55,8 +60,8 @@ public class InventoryResource {
     public ResultTemplate<Boolean> notifyInventory(@RequestBody OrderEntityRequest request) {
 
         Order order = mapper.map(request, Order.class);
-        inventoryService.notifyInventory(order);
-        return new ResultTemplate<Boolean>(true);
+        boolean result = inventoryService.notifyInventory(order);
+        return new ResultTemplate<Boolean>(result);
     }
 
 }
