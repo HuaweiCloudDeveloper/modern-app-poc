@@ -54,5 +54,12 @@ public class OrderRepository implements OrderRepositoryContract {
         }, orderId);
     }
 
+    @Override
+    public int update(Order order) {
+
+        String sql = "UPDATE orders SET name = ?, total_price=? WHERE oid = ?";
+        return jdbcTemplate.update(sql, order.getName(), order.getTotalPrice(), order.getOid());
+    }
+
 
 }

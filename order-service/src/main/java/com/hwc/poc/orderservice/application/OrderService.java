@@ -40,4 +40,8 @@ public class OrderService {
     public String notifyInventory(Order order) {
         return inventoryGateway.notifyInventory(order);
     }
+
+    public int updateOrder(Order order) {
+        return repository.update(order);
+    }
 }

@@ -5,6 +5,7 @@ import com.hwc.poc.orderservice.application.OrderService;
 import com.hwc.poc.orderservice.application.model.Order;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationRequest;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationResponse;
+import com.hwc.poc.orderservice.resource.parameters.OrderUpdateRequest;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,15 @@ public class OrderResource {
         Order result = orderService.placeOrder(param);
 
         return mapper.map(result, OrderCreationResponse.class);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.PUT, headers = "Accept=application/json")
+    public int update(OrderUpdateRequest request) {
+
+        Order param = mapper.map(request, Order.class);
+        param.setUid(DEFUALT_UID);
+
+        return orderService.updateOrder(param);
     }
 
     @RequestMapping(value = "/{oid}", method = RequestMethod.GET, headers = "Accept=application/json")

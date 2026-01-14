@@ -7,4 +7,6 @@ public interface OrderRepositoryContract {
     Order save(Order order);
 
     Order load(Integer orderId);
+
+    int update(Order order);
 }
