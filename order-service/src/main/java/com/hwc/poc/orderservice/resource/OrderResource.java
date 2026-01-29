@@ -2,6 +2,7 @@ package com.hwc.poc.orderservice.resource;
 
 
 import com.hwc.poc.orderservice.application.OrderService;
+import com.hwc.poc.orderservice.application.model.File;
 import com.hwc.poc.orderservice.application.model.Order;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationRequest;
 import com.hwc.poc.orderservice.resource.parameters.OrderCreationResponse;
@@ -10,10 +11,13 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -75,6 +79,29 @@ public class OrderResource {
 
         Order order = mapper.map(request, Order.class);
         return orderService.notifyInventory(order);
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+        // 校验文件是否为空
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("上传失败！文件不能为空");
+        }
+
+        try {
+            // 调用服务层保存文件
+            File fileEntity = orderService.uploadFile(file);
+            return ResponseEntity.ok()
+                    .body("File uploaded successfully! File ID:" + fileEntity.getId() +
+                            "，File Name：" + fileEntity.getFileName() +
+                            "Size：" + fileEntity.getFileSize() + "Byte");
+        } catch (IllegalArgumentException e) {
+            // 文件大小超限
+            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(e.getMessage());
+        } catch (Exception e) {
+            // 文件读取/保存异常
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File uploaded failed：" + e.getMessage());
+        }
     }
 
 }

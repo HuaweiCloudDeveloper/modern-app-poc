@@ -1,11 +1,14 @@
 package com.hwc.poc.orderservice.application;
 
 
+import com.hwc.poc.orderservice.application.contract.FileRepositoryContract;
 import com.hwc.poc.orderservice.application.contract.InventoryGatewayContract;
 import com.hwc.poc.orderservice.application.contract.OrderRepositoryContract;
+import com.hwc.poc.orderservice.application.model.File;
 import com.hwc.poc.orderservice.application.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Component
@@ -13,6 +16,9 @@ public class OrderService {
 
     @Autowired
     private OrderRepositoryContract repository;
+
+    @Autowired
+    private FileRepositoryContract fileRepository;
 
     @Autowired
     private InventoryGatewayContract inventoryGateway;
@@ -43,5 +49,9 @@ public class OrderService {
 
     public int updateOrder(Order order) {
         return repository.update(order);
+    }
+
+    public File uploadFile(MultipartFile file) throws Exception {
+        return fileRepository.upload(file);
     }
 }
