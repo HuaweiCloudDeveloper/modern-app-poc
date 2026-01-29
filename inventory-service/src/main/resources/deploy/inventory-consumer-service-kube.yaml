@@ -62,8 +62,22 @@ spec:
             value: "false"
           - name: DMS_CONSUMER_AUTO_COMMIT_INTERVAL_MS
             value: "1000"
-          - name: DMS_CONSUMER_PULL_DURATION
+          - name: DMS_CONSUMER_POLL_DURATION
             value: "1000"
+          - name: DMS_CONSUMER_MAX_POLL_RECORDS
+            value: "500"
+          - name: DMS_CONSUMER_MAX_POLL_INTERVAL_MS
+            value: "500"
+          - name: DMS_CONSUMER_CONNECTIONS_MAX_IDLE_MS
+            value: "600000"
+          - name: DMS_CONSUMER_HEARTBEAT_INTERVAL_MS
+            value: "300"
+          - name: DMS_CONSUMER_SESSION_TIMEOUT_MS
+            value: "10000"
+          - name: DMS_CONSUMER_FETCH_MAX_BYTES
+            value: "1000000"
+          - name: DMS_CONSUMER_AUTO_OFFSET_RESET
+            value: "latest"
         imagePullPolicy: Always
       restartPolicy: Always
       imagePullSecrets:

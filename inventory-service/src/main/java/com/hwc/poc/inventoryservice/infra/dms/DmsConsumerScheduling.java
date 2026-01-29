@@ -36,8 +36,8 @@ public class DmsConsumerScheduling {
     @Value("${DMS_TOPIC:${hwc.poc.inventory.dms.topic}}")
     private String dmsTopic;
 
-    @Value("${DMS_CONSUMER_PULL_DURATION:${hwc.poc.inventory.dms.dms-consumer.pull-duration}}")
-    private Integer dmsConsumerPullDuration;
+    @Value("${DMS_CONSUMER_POLL_DURATION:${hwc.poc.inventory.dms.dms-consumer.poll-duration}}")
+    private Integer dmsConsumerPollDuration;
 
     @PostConstruct
     @Async
@@ -64,7 +64,7 @@ public class DmsConsumerScheduling {
                 while(true) {
 
                     ConsumerRecords<String, String> records =
-                            dmsConsumer.poll(Duration.ofMillis(dmsConsumerPullDuration));
+                            dmsConsumer.poll(Duration.ofMillis(dmsConsumerPollDuration));
                     Calendar calendar = Calendar.getInstance();
                     ZonedDateTime zonedDateTime = calendar.toInstant().atZone(ZoneId.systemDefault());
                     for(ConsumerRecord<String, String> record : records){

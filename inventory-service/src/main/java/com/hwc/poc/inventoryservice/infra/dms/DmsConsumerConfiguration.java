@@ -26,7 +26,26 @@ public class DmsConsumerConfiguration {
     @Value("${DMS_CONSUMER_AUTO_COMMIT_INTERVAL_MS:${hwc.poc.inventory.dms.dms-consumer.auto-commit-interval-ms}}")
     private Integer dmsConsumerAutoCommitInterval;
 
+    @Value("${DMS_CONSUMER_MAX_POLL_RECORDS:${hwc.poc.inventory.dms.dms-consumer.max-poll-records}}")
+    private Integer dmsConsumerMaxPollRecords;
 
+    @Value("${DMS_CONSUMER_MAX_POLL_INTERVAL_MS:${hwc.poc.inventory.dms.dms-consumer.max-poll-interval-ms}}")
+    private Integer dmsConsumerMaxPollIntervalMs;
+
+    @Value("${DMS_CONSUMER_CONNECTIONS_MAX_IDLE_MS:${hwc.poc.inventory.dms.dms-consumer.connections-max-idle-ms}}")
+    private Integer dmsConsumerConnectionsMaxIdleMs;
+
+    @Value("${DMS_CONSUMER_HEARTBEAT_INTERVAL_MS:${hwc.poc.inventory.dms.dms-consumer.heartbeat-interval-ms}}")
+    private Integer dmsConsumerHeartbeatIntervalMs;
+
+    @Value("${DMS_CONSUMER_SESSION_TIMEOUT_MS:${hwc.poc.inventory.dms.dms-consumer.session-timeout-ms}}")
+    private Integer dmsConsumerSessionTimeoutMs;
+
+    @Value("${DMS_CONSUMER_FETCH_MAX_BYTES:${hwc.poc.inventory.dms.dms-consumer.fetch-max-bytes}}")
+    private Integer dmsConsumerFetchMaxBytes;
+
+    @Value("${DMS_CONSUMER_AUTO_OFFSET_RESET:${hwc.poc.inventory.dms.dms-consumer.auto-offset-reset}}")
+    private String dmsConsumerAutoOffsetReset;
 
     @Bean
     Consumer<String, String> dmsConsumer(){
@@ -41,6 +60,15 @@ public class DmsConsumerConfiguration {
         }
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+
+        // add extends params
+        properties.put("max.poll.records", dmsConsumerMaxPollRecords);
+        properties.put("max.poll.interval.ms", dmsConsumerMaxPollIntervalMs);
+        properties.put("connections.max.idle.ms", dmsConsumerConnectionsMaxIdleMs);
+        properties.put("heartbeat.interval.ms", dmsConsumerHeartbeatIntervalMs);
+        properties.put("session.timeout.ms", dmsConsumerSessionTimeoutMs);
+        properties.put("fetch.max.bytes", dmsConsumerFetchMaxBytes);
+        properties.put("auto.offset.reset", dmsConsumerAutoOffsetReset);
 
         logger.info("The initialization of dmsConsumer properties is finished, and the dmsConsumerAutoCommit is {}."
                 , dmsConsumerAutoCommit);
