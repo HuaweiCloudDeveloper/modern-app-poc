@@ -5,4 +5,6 @@ CREATE TABLE `poc_order_db`.`files`  (
   `file_content` MEDIUMBLOB,
   `upload_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB ROW_FORMAT=COMPRESSED
+ PARTITION BY HASH(`id`);
+PARTITION 8;

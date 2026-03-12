@@ -54,7 +54,7 @@ public class DmsConsumerConfiguration {
 
         properties.put("bootstrap.servers", dmsConServers);
         properties.put("group.id", dmsConsumerGroupId);
-        properties.put("enable.auto.commit", dmsConsumerAutoCommit);
+         
         if(dmsConsumerAutoCommit) {
             properties.put("auto.commit.interval.ms", dmsConsumerAutoCommitInterval);
         }
